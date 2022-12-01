@@ -19,18 +19,20 @@ import com.firdausam.dicodingjcomposesub.ui.ViewModelFactory
 import com.firdausam.dicodingjcomposesub.ui.component.AnimeItem
 import com.firdausam.dicodingjcomposesub.ui.component.SearchBar
 import com.firdausam.dicodingjcomposesub.ui.screen.common.BaseScreen
+import com.firdausam.dicodingjcomposesub.util.BackPressHandler
 
 @Composable
 fun HomeScreen(
+    navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
-    navigateToDetail: (Int) -> Unit
 ) {
+    val query = viewModel.query.collectAsState().value
     Column(modifier = modifier) {
         SearchBar(
-            viewModel.query.collectAsState().value,
+            query,
             onValueChange = viewModel::search,
             modifier = Modifier.background(MaterialTheme.colors.primary)
         )
@@ -39,6 +41,10 @@ fun HomeScreen(
         ) {
             AnimeContent(it, navigateToDetail)
         }
+    }
+
+    BackPressHandler(query.isNotEmpty()) {
+        viewModel.search("")
     }
 }
 
