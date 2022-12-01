@@ -27,4 +27,5 @@
     <string name="rating">Rating</string>
     <string name="synopsis">Synopsis</string>
     <string name="background">Background</string>
+    <string name="placeholder_search">Find anime</string>
 </resources>

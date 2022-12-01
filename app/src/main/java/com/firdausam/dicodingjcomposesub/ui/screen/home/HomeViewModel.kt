@@ -17,6 +17,9 @@ class HomeViewModel(
         MutableStateFlow(AnimeListState())
     val state get() = _state.asStateFlow()
 
+    private val _query = MutableStateFlow("")
+    val query = _query.asStateFlow()
+
     private var searchJob: Job? = null
     private val keyword = MutableStateFlow("")
 
@@ -29,10 +32,11 @@ class HomeViewModel(
     }
 
     fun search(key: String) {
+        _query.value = key
         searchJob?.cancel()
-        if (key.isNotEmpty()) {
-            searchJob = viewModelScope.launch {
-                delay(500)
+        searchJob = viewModelScope.launch {
+            delay(750)
+            if (!key.equals(keyword.value, ignoreCase = true)) {
                 keyword.value = key
             }
         }
