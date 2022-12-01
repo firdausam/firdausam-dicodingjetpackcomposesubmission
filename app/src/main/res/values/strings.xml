@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">FAM Anime</string>
+    <string name="home">Home</string>
+    <string name="detail">Detail</string>
+    <string name="favorite">Favorite</string>
+    <string name="profile">Profile</string>
+    <string name="members_count">%d members</string>
+    <string name="error_message">Sorry for Error</string>
+    <string name="empty_message">Empty Data</string>
+    <string name="information">Information</string>
+    <string name="ranked">Ranked</string>
+    <string name="popularity">Popularity</string>
+    <string name="members">Members</string>
+    <string name="type">Type</string>
+    <string name="episodes">Episodes</string>
+    <string name="status">Status</string>
+    <string name="aired">Aired</string>
+    <string name="premiered">Premiered</string>
+    <string name="broadcast">broadcast</string>
+    <string name="producers">Producers</string>
+    <string name="licensors">Licensors</string>
+    <string name="studios">Studios</string>
+    <string name="source">Source</string>
+    <string name="genres">Genres</string>
+    <string name="demographic">Demographic</string>
+    <string name="duration">Duration</string>
+    <string name="rating">Rating</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="background">Background</string>
+</resources>
