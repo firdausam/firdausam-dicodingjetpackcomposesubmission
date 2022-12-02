@@ -3,12 +3,15 @@ package com.firdausam.dicodingjcomposesub.data
 import android.util.Log
 import com.firdausam.dicodingjcomposesub.data.converter.toAnime
 import com.firdausam.dicodingjcomposesub.data.converter.toDetailAnime
+import com.firdausam.dicodingjcomposesub.data.converter.toEntity
 import com.firdausam.dicodingjcomposesub.data.local.room.AnimeDao
 import com.firdausam.dicodingjcomposesub.data.remote.retrofit.ApiService
 import com.firdausam.dicodingjcomposesub.domain.model.Anime
 import com.firdausam.dicodingjcomposesub.domain.model.DetailAnime
 import com.firdausam.dicodingjcomposesub.domain.repository.AnimeRepository
 import com.firdausam.dicodingjcomposesub.domain.util.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class AnimeDataRepository constructor(
     private val apiService: ApiService,
@@ -51,5 +54,23 @@ class AnimeDataRepository constructor(
             Log.e(TAG, "getAnime: ", e)
             Resource.Error(e.message.toString())
         }
+    }
+
+    override suspend fun saveFavorite(detailAnime: DetailAnime) {
+        animeDao.saveAnime(detailAnime.toEntity())
+    }
+
+    override suspend fun removeFavorite(id: Int) {
+        animeDao.deleteAnime(id)
+    }
+
+    override fun getFavoritesAnime(): Flow<List<Anime>> {
+        return animeDao.getFavoritesAnime().map { data ->
+            data.map { it.toAnime() }
+        }
+    }
+
+    override fun isAnimeFavorite(id: Int): Flow<Boolean> {
+        return animeDao.isAnimeFavorite(id)
     }
 }

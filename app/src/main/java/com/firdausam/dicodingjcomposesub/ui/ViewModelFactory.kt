@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.firdausam.dicodingjcomposesub.di.Injection
 import com.firdausam.dicodingjcomposesub.domain.repository.AnimeRepository
 import com.firdausam.dicodingjcomposesub.ui.screen.detail.DetailViewModel
+import com.firdausam.dicodingjcomposesub.ui.screen.favorite.FavoriteViewModel
 import com.firdausam.dicodingjcomposesub.ui.screen.home.HomeViewModel
 
 class ViewModelFactory(private val repository: AnimeRepository) :
@@ -18,6 +19,8 @@ class ViewModelFactory(private val repository: AnimeRepository) :
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
             return HomeViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)) {
+            return FavoriteViewModel(repository) as T
         }
         throw IllegalArgumentException("ViewModelClass: ${modelClass.name} isn't assignable")
     }

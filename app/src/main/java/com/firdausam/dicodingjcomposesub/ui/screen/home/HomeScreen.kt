@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.firdausam.dicodingjcomposesub.domain.model.Anime
 import com.firdausam.dicodingjcomposesub.ui.ViewModelFactory
+import com.firdausam.dicodingjcomposesub.ui.component.AnimeContent
 import com.firdausam.dicodingjcomposesub.ui.component.AnimeItem
 import com.firdausam.dicodingjcomposesub.ui.component.SearchBar
 import com.firdausam.dicodingjcomposesub.ui.screen.common.BaseScreen
@@ -45,34 +46,5 @@ fun HomeScreen(
 
     BackPressHandler(query.isNotEmpty()) {
         viewModel.search("")
-    }
-}
-
-@Composable
-fun AnimeContent(
-    anime: List<Anime>,
-    navigateToDetail: (Int) -> Unit
-) {
-    val listState = rememberLazyListState()
-    LazyColumn(
-        state = listState,
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(anime) { item ->
-            with(item) {
-                AnimeItem(
-                    title = title,
-                    image = image,
-                    type = type,
-                    episodeCount = episodes,
-                    memberCount = members,
-                    score = score,
-                    modifier = Modifier.clickable {
-                        navigateToDetail(item.id)
-                    }
-                )
-            }
-        }
     }
 }

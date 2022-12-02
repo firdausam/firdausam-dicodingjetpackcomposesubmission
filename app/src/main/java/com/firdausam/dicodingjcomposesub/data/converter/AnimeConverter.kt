@@ -49,7 +49,7 @@ fun AnimeResponse.toDetailAnime(): DetailAnime {
     )
 }
 
-fun Anime.toEntity(): AnimeEntity {
+fun DetailAnime.toEntity(): AnimeEntity {
     return AnimeEntity(
         id = id,
         title = title,

@@ -9,7 +9,9 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -21,6 +23,7 @@ import com.firdausam.dicodingjcomposesub.ui.navigation.KEY_ID
 import com.firdausam.dicodingjcomposesub.ui.navigation.NavigationItem
 import com.firdausam.dicodingjcomposesub.ui.navigation.Screen
 import com.firdausam.dicodingjcomposesub.ui.screen.detail.DetailScreen
+import com.firdausam.dicodingjcomposesub.ui.screen.favorite.FavoriteScreen
 import com.firdausam.dicodingjcomposesub.ui.screen.home.HomeScreen
 import com.firdausam.dicodingjcomposesub.util.currentRoute
 import com.firdausam.dicodingjcomposesub.util.navigateCommon
@@ -30,9 +33,12 @@ fun AnimeApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val context = LocalContext.current
     val currentRoute = navController.currentRoute
 
     Scaffold(
+        scaffoldState = scaffoldState,
         bottomBar = {
             if (currentRoute != Screen.Detail.route) {
                 BottomBar(navController)
@@ -51,7 +57,9 @@ fun AnimeApp(
                     })
                 }
                 composable(Screen.Favorite.route) {
-                    Text(text = Screen.Favorite.route)
+                    FavoriteScreen(navigateToDetail = { id ->
+                        navController.navigate(Screen.Detail.createRoute(id))
+                    })
                 }
                 composable(Screen.Profile.route) {
                     Text(text = Screen.Profile.route)
@@ -63,7 +71,18 @@ fun AnimeApp(
                     val id: Int = it.arguments?.getInt(KEY_ID) ?: -1
                     DetailScreen(
                         id = id,
-                        onBackClick = { navController.navigateUp() }
+                        onBackClick = { navController.navigateUp() },
+                        onToFavorite = { title ->
+                            val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
+                                message = context.resources.getString(R.string.save_to_favorite, title),
+                                actionLabel = context.resources.getString(R.string.to_favorite)
+                            )
+
+                            if (snackBarResult == SnackbarResult.ActionPerformed) {
+                                navController.popBackStack()
+                                navController.navigateCommon(Screen.Favorite.route)
+                            }
+                        }
                     )
                 }
             }

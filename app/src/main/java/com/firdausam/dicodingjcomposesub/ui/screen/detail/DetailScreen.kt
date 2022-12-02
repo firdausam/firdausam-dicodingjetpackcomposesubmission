@@ -1,6 +1,7 @@
 package com.firdausam.dicodingjcomposesub.ui.screen.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,7 +9,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,9 +22,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -36,33 +43,31 @@ import com.firdausam.dicodingjcomposesub.ui.theme.Shapes
 fun DetailScreen(
     id: Int,
     onBackClick: () -> Unit,
+    onToFavorite: suspend (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current),
         extras = MutableCreationExtras().apply { set(ViewModelFactory.KeyId, id) }
     )
 ) {
-    Column {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = onBackClick) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "back"
-                    )
-                }
-            },
-            title = {
-                Text(stringResource(R.string.detail))
-            },
-        )
-        BaseScreen(
-            state = viewModel.state.collectAsState().value,
-            modifier = modifier.weight(1f)
-        ) { result ->
-            with(result) {
-                AnimeDetailContent(
+    BaseScreen(
+        state = viewModel.state.collectAsState().value,
+        modifier = modifier
+    ) { result ->
+        with(result) {
+            Column {
+                DetailTopBar(
                     title = title,
+                    isFavorite = viewModel.isFavorite.collectAsState().value,
+                    initFavorite = viewModel.initFavorite,
+                    onClickFavorite = {
+                        viewModel.changeFavorite(result)
+                    },
+                    onBackClick = onBackClick,
+                    onToFavorite = onToFavorite,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+                AnimeDetailContent(
                     image = image,
                     score = score,
                     ranked = ranked,
@@ -72,7 +77,7 @@ fun DetailScreen(
                     descriptions = toDescriptions(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
+                        .padding(horizontal = 12.dp),
                 )
             }
         }
@@ -80,8 +85,72 @@ fun DetailScreen(
 }
 
 @Composable
-fun AnimeDetailContent(
+fun DetailTopBar(
     title: String,
+    onClickFavorite: () -> Unit,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    onToFavorite: suspend (String) -> Unit = {},
+    isFavorite: Boolean = false,
+    initFavorite: Boolean = true
+) {
+    ConstraintLayout(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        val (backIcon, titleText, favoriteIcon) = createRefs()
+
+        Icon(
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = stringResource(R.string.back),
+            tint = MaterialTheme.colors.primary,
+            modifier = Modifier
+                .padding(8.dp)
+                .clickable { onBackClick() }
+                .constrainAs(backIcon) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start, margin = 8.dp)
+                }
+        )
+        Text(
+            text = title,
+            style = MaterialTheme.typography.subtitle1.copy(
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colors.primary
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .constrainAs(titleText) {
+                    start.linkTo(backIcon.end, margin = 8.dp)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(favoriteIcon.start, margin = 8.dp)
+                    width = Dimension.fillToConstraints
+                }
+        )
+
+        Icon(
+            imageVector = if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+            contentDescription = stringResource(R.string.favorite),
+            tint = MaterialTheme.colors.primary,
+            modifier = Modifier
+                .padding(8.dp)
+                .clickable { onClickFavorite() }
+                .constrainAs(favoriteIcon) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end, margin = 8.dp)
+                }
+        )
+
+        LaunchedEffect(isFavorite) {
+            if (isFavorite && !initFavorite) {
+                onToFavorite(title)
+            }
+        }
+    }
+}
+
+@Composable
+fun AnimeDetailContent(
     image: String,
     score: Double,
     ranked: Int,
@@ -92,14 +161,6 @@ fun AnimeDetailContent(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = title,
-            style = MaterialTheme.typography.h6.copy(
-                fontWeight = FontWeight.ExtraBold
-            )
-        )
-        Spacer(modifier = Modifier.height(12.dp))
         TitleDivider(title = stringResource(R.string.information))
         Row(
             modifier = Modifier
@@ -199,6 +260,18 @@ fun AnimeDetailContent(
     }
 }
 
+
+@Preview(showBackground = true)
+@Composable
+fun MyTopBarPreview() {
+    DetailTopBar(
+        title = "Lorem Ipsum Dolor Sit Amet",
+        isFavorite = false,
+        onBackClick = {},
+        onClickFavorite = {}
+    )
+}
+
 @Preview(
     showBackground = true,
     device = Devices.PIXEL_4
@@ -207,7 +280,6 @@ fun AnimeDetailContent(
 fun AnimeDetailContentPreview() {
     DicodingJetpackComposeSubmissionTheme {
         AnimeDetailContent(
-            title = "Lorem Ipsum Dolor Sit Amet",
             image = "image",
             score = 10.0,
             ranked = 1,
@@ -233,7 +305,7 @@ fun AnimeDetailContentPreview() {
                     value = "Welcome to your personal dashboard, where you can find an introduction to how GitHub works, tools to help you build software, and help merging your first lines of code."
                 )
             ),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

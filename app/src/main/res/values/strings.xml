@@ -4,6 +4,7 @@
     <string name="detail">Detail</string>
     <string name="favorite">Favorite</string>
     <string name="profile">Profile</string>
+    <string name="back">Back</string>
     <string name="members_count">%d members</string>
     <string name="error_message">Sorry for Error</string>
     <string name="empty_message">Empty Data</string>
@@ -28,4 +29,6 @@
     <string name="synopsis">Synopsis</string>
     <string name="background">Background</string>
     <string name="placeholder_search">Find anime</string>
+    <string name="save_to_favorite">%s Saved to Favorite</string>
+    <string name="to_favorite">To Favorite</string>
 </resources>
