@@ -1,18 +1,22 @@
 package com.firdausam.dicodingjcomposesub.ui.screen.detail
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.SnackbarResult
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,15 +42,18 @@ import com.firdausam.dicodingjcomposesub.ui.screen.common.BaseScreen
 import com.firdausam.dicodingjcomposesub.ui.theme.BlackOpacity
 import com.firdausam.dicodingjcomposesub.ui.theme.DicodingJetpackComposeSubmissionTheme
 import com.firdausam.dicodingjcomposesub.ui.theme.Shapes
+import com.firdausam.dicodingjcomposesub.util.MySnackbar
 
 @Composable
 fun DetailScreen(
     id: Int,
     onBackClick: () -> Unit,
-    onToFavorite: suspend (String) -> Unit,
+    onToFavorite: () -> Unit,
+    mySnackbar: MySnackbar,
     modifier: Modifier = Modifier,
+    context: Context = LocalContext.current,
     viewModel: DetailViewModel = viewModel(
-        factory = ViewModelFactory.getInstance(LocalContext.current),
+        factory = ViewModelFactory.getInstance(context),
         extras = MutableCreationExtras().apply { set(ViewModelFactory.KeyId, id) }
     )
 ) {
@@ -54,17 +61,36 @@ fun DetailScreen(
         state = viewModel.state.collectAsState().value,
         modifier = modifier
     ) { result ->
+        val isFavorite = viewModel.isFavorite.collectAsState().value
         with(result) {
             Column {
                 DetailTopBar(
                     title = title,
-                    isFavorite = viewModel.isFavorite.collectAsState().value,
-                    initFavorite = viewModel.initFavorite,
+                    isFavorite = isFavorite,
                     onClickFavorite = {
                         viewModel.changeFavorite(result)
                     },
                     onBackClick = onBackClick,
-                    onToFavorite = onToFavorite,
+                    onFavorited = {
+                        DisposableEffect(isFavorite) {
+                            if (!viewModel.initFavorite) {
+                                mySnackbar.showSnackBar(
+                                    message = context.resources.getString(
+                                        R.string.save_to_favorite,
+                                        title
+                                    ),
+                                    actionLabel = context.resources.getString(R.string.to_favorite),
+                                ) { snackBarResult ->
+                                    if (snackBarResult == SnackbarResult.ActionPerformed) {
+                                        onToFavorite()
+                                    }
+                                }
+                            }
+                            onDispose {
+                                mySnackbar.dismiss()
+                            }
+                        }
+                    },
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
                 AnimeDetailContent(
@@ -90,9 +116,8 @@ fun DetailTopBar(
     onClickFavorite: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onToFavorite: suspend (String) -> Unit = {},
-    isFavorite: Boolean = false,
-    initFavorite: Boolean = true
+    onFavorited: @Composable () -> Unit = {},
+    isFavorite: Boolean = false
 ) {
     ConstraintLayout(
         modifier = modifier.fillMaxWidth()
@@ -141,10 +166,8 @@ fun DetailTopBar(
                 }
         )
 
-        LaunchedEffect(isFavorite) {
-            if (isFavorite && !initFavorite) {
-                onToFavorite(title)
-            }
+        if (isFavorite) {
+            onFavorited()
         }
     }
 }
