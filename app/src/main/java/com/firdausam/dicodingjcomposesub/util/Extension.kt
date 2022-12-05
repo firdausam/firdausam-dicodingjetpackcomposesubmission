@@ -1,5 +1,8 @@
 package com.firdausam.dicodingjcomposesub.util
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -22,4 +25,10 @@ fun NavHostController.navigateCommon(route: String) {
         restoreState = true
         launchSingleTop = true
     }
+}
+
+fun Context.toIntentUrl(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.data = Uri.parse(url)
+    startActivity(intent)
 }

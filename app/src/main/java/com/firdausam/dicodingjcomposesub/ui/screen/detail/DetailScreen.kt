@@ -71,7 +71,7 @@ fun DetailScreen(
                         viewModel.changeFavorite(result)
                     },
                     onBackClick = onBackClick,
-                    onFavorited = {
+                    onFavorite = {
                         DisposableEffect(isFavorite) {
                             if (!viewModel.initFavorite) {
                                 mySnackbar.showSnackBar(
@@ -116,7 +116,7 @@ fun DetailTopBar(
     onClickFavorite: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onFavorited: @Composable () -> Unit = {},
+    onFavorite: @Composable () -> Unit = {},
     isFavorite: Boolean = false
 ) {
     ConstraintLayout(
@@ -167,7 +167,7 @@ fun DetailTopBar(
         )
 
         if (isFavorite) {
-            onFavorited()
+            onFavorite()
         }
     }
 }
@@ -287,12 +287,14 @@ fun AnimeDetailContent(
 @Preview(showBackground = true)
 @Composable
 fun MyTopBarPreview() {
-    DetailTopBar(
-        title = "Lorem Ipsum Dolor Sit Amet",
-        isFavorite = false,
-        onBackClick = {},
-        onClickFavorite = {}
-    )
+    DicodingJetpackComposeSubmissionTheme {
+        DetailTopBar(
+            title = "Lorem Ipsum Dolor Sit Amet",
+            isFavorite = false,
+            onBackClick = {},
+            onClickFavorite = {}
+        )
+    }
 }
 
 @Preview(

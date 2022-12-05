@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -23,9 +24,11 @@ import com.firdausam.dicodingjcomposesub.ui.navigation.Screen
 import com.firdausam.dicodingjcomposesub.ui.screen.detail.DetailScreen
 import com.firdausam.dicodingjcomposesub.ui.screen.favorite.FavoriteScreen
 import com.firdausam.dicodingjcomposesub.ui.screen.home.HomeScreen
+import com.firdausam.dicodingjcomposesub.ui.screen.profile.ProfileScreen
 import com.firdausam.dicodingjcomposesub.util.currentRoute
 import com.firdausam.dicodingjcomposesub.util.navigateCommon
 import com.firdausam.dicodingjcomposesub.util.rememberMySnackbar
+import com.firdausam.dicodingjcomposesub.util.toIntentUrl
 
 @Composable
 fun AnimeApp(
@@ -34,6 +37,7 @@ fun AnimeApp(
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val currentRoute = navController.currentRoute
+    val context = LocalContext.current
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -60,7 +64,17 @@ fun AnimeApp(
                     })
                 }
                 composable(Screen.Profile.route) {
-                    Text(text = Screen.Profile.route)
+                    ProfileScreen(
+                        onDicodingClick = {
+                            context.toIntentUrl(context.getString(R.string.my_dicoding))
+                        },
+                        onLinkedinClick = {
+                            context.toIntentUrl(context.getString(R.string.my_linkedin))
+                        },
+                        onGithubClick = {
+                            context.toIntentUrl(context.getString(R.string.my_github))
+                        }
+                    )
                 }
                 composable(
                     route = Screen.Detail.route,
