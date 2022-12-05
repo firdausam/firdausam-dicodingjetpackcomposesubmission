@@ -11,11 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.firdausam.dicodingjcomposesub.R
 import com.firdausam.dicodingjcomposesub.ui.theme.DicodingJetpackComposeSubmissionTheme
+import com.firdausam.dicodingjcomposesub.util.SearchField
 
 @Composable
 fun SearchBar(
@@ -39,6 +41,7 @@ fun SearchBar(
             Text(stringResource(R.string.placeholder_search))
         },
         modifier = modifier
+            .testTag(SearchField)
             .padding(16.dp)
             .fillMaxWidth()
             .heightIn(min = 48.dp)

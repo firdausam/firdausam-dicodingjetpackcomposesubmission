@@ -44,13 +44,26 @@ class AnimeAppTest {
     }
 
     @Test
-    fun navHost_bottomNavigation_working() {
+    fun navHost_bottomNavigation() {
         composeTestRule.onNodeContentDescWithStringId(R.string.menu_favorite).performClick()
         navController.assertCurrentRouteName(Screen.Favorite.route)
         composeTestRule.onNodeContentDescWithStringId(R.string.menu_about).performClick()
         navController.assertCurrentRouteName(Screen.About.route)
         composeTestRule.onNodeContentDescWithStringId(R.string.menu_home).performClick()
         navController.assertCurrentRouteName(Screen.Home.route)
+    }
+
+    @Test
+    fun show_data_home_with_search() {
+        navController.assertCurrentRouteName(Screen.Home.route)
+        composeTestRule.onNodeWithTag(SearchField).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(SearchField).performTextInput("naruto")
+        composeTestRule.waitUntil(5_000) {
+            return@waitUntil composeTestRule.onAllNodesWithTag(TagListItem)
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+        composeTestRule.onNodeWithTag(TagListItem).onChildren().onFirst().assertExists()
     }
 
     @Test

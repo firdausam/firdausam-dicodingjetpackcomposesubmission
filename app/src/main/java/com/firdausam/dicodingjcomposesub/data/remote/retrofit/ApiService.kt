@@ -8,7 +8,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-    @GET("anime?status=airing&order_by=score&sort=desc")
+    @GET("anime")
     suspend fun getAnime(
         @Query("q") q: String,
         @Query("status") status: String = "status",
