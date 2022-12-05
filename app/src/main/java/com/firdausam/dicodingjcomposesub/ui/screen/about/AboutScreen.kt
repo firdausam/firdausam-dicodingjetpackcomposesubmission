@@ -1,6 +1,6 @@
 package com.firdausam.dicodingjcomposesub.ui.screen.about
 
-import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -16,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -31,67 +30,87 @@ fun AboutScreen(
     modifier: Modifier = Modifier,
     onSocmedIconClick: (String) -> Unit
 ) {
-    val context: Context = LocalContext.current
     Box(modifier.fillMaxSize()) {
-        Column(
+        AboutContent(
+            name = stringResource(R.string.my_name),
+            email = stringResource(R.string.my_email_dicoding),
+            imgProfile = R.drawable.img_profil,
+            dicodingUrl = stringResource(R.string.my_dicoding),
+            linkedInUrl = stringResource(R.string.my_linkedin),
+            githubUrl = stringResource(R.string.my_dicoding),
+            onSocmedIconClick = onSocmedIconClick,
+            modifier = Modifier.align(Alignment.Center),
+        )
+    }
+}
+
+@Composable
+private fun AboutContent(
+    name: String,
+    email: String,
+    @DrawableRes imgProfile: Int,
+    dicodingUrl: String,
+    linkedInUrl: String,
+    githubUrl: String,
+    modifier: Modifier = Modifier,
+    onSocmedIconClick: (String) -> Unit,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = imgProfile),
+            contentDescription = stringResource(R.string.profile),
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .size(120.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = name,
+            style = MaterialTheme.typography.h6.copy(
+                fontWeight = FontWeight.Black
+            )
+        )
+        Text(
+            text = email,
+            style = MaterialTheme.typography.body2.copy(
+                fontWeight = FontWeight.Light
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.img_profil),
-                contentDescription = stringResource(R.string.profile),
-                contentScale = ContentScale.Crop,
+                painter = painterResource(R.drawable.ic_dicoding),
+                contentDescription = stringResource(R.string.dicoding),
                 modifier = Modifier
-                    .size(120.dp)
+                    .size(40.dp)
                     .clip(CircleShape)
+                    .clickable(onClick = { onSocmedIconClick(dicodingUrl) })
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(id = R.string.my_name),
-                style = MaterialTheme.typography.h6.copy(
-                    fontWeight = FontWeight.Black
-                )
+            Spacer(modifier = Modifier.width(16.dp))
+            Image(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_linkedin),
+                contentDescription = stringResource(R.string.linkedin),
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = { onSocmedIconClick(linkedInUrl) })
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_dicoding),
-                    contentDescription = stringResource(R.string.dicoding),
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .clickable(onClick = {
-                            onSocmedIconClick(context.getString(R.string.my_dicoding))
-                        })
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_linkedin),
-                    contentDescription = stringResource(R.string.linkedin),
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .clickable(onClick = {
-                            onSocmedIconClick(context.getString(R.string.my_linkedin))
-                        })
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_github),
-                    contentDescription = stringResource(R.string.github),
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .clickable(onClick = {
-                            onSocmedIconClick(context.getString(R.string.my_dicoding))
-                        }),
-                    tint = if (isSystemInDarkTheme()) Color.White else Color.Black
-                )
-            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_github),
+                contentDescription = stringResource(R.string.github),
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = { onSocmedIconClick(githubUrl) }),
+                tint = if (isSystemInDarkTheme()) Color.White else Color.Black
+            )
         }
     }
 }
