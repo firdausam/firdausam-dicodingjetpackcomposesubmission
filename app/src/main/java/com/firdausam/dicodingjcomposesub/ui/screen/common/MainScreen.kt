@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import com.firdausam.dicodingjcomposesub.ui.component.EmptyCommon
 import com.firdausam.dicodingjcomposesub.ui.component.ErrorCommon
 import com.firdausam.dicodingjcomposesub.ui.component.ProgressCommon
 import com.firdausam.dicodingjcomposesub.ui.state.BaseState
+import com.firdausam.dicodingjcomposesub.util.TagEmpty
+import com.firdausam.dicodingjcomposesub.util.TagLoading
 
 @Composable
 fun <T: Any> BaseScreen(
@@ -36,12 +39,12 @@ fun <T: Any> BaseScreen(
 
 @Composable
 private fun BoxScope.BaseLoad() {
-    ProgressCommon(Modifier.align(Alignment.Center))
+    ProgressCommon(Modifier.align(Alignment.Center).testTag(TagLoading))
 }
 
 @Composable
 private fun BoxScope.BaseEmpty() {
-    EmptyCommon(modifier = Modifier.align(Alignment.Center))
+    EmptyCommon(modifier = Modifier.align(Alignment.Center).testTag(TagEmpty))
 }
 
 @Composable

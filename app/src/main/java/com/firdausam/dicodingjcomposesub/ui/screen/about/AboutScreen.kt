@@ -1,5 +1,6 @@
-package com.firdausam.dicodingjcomposesub.ui.screen.profile
+package com.firdausam.dicodingjcomposesub.ui.screen.about
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -15,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -25,12 +27,11 @@ import com.firdausam.dicodingjcomposesub.R
 import com.firdausam.dicodingjcomposesub.ui.theme.DicodingJetpackComposeSubmissionTheme
 
 @Composable
-fun ProfileScreen(
+fun AboutScreen(
     modifier: Modifier = Modifier,
-    onDicodingClick: () -> Unit,
-    onLinkedinClick: () -> Unit,
-    onGithubClick: () -> Unit,
+    onSocmedIconClick: (String) -> Unit
 ) {
+    val context: Context = LocalContext.current
     Box(modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -40,7 +41,7 @@ fun ProfileScreen(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_profil),
-                contentDescription = "profile",
+                contentDescription = stringResource(R.string.profile),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(120.dp)
@@ -59,29 +60,35 @@ fun ProfileScreen(
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_dicoding),
-                    contentDescription = "dicoding",
+                    contentDescription = stringResource(R.string.dicoding),
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
-                        .clickable(onClick = onDicodingClick)
+                        .clickable(onClick = {
+                            onSocmedIconClick(context.getString(R.string.my_dicoding))
+                        })
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Image(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_linkedin),
-                    contentDescription = "linkedin",
+                    contentDescription = stringResource(R.string.linkedin),
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .clickable(onClick = onLinkedinClick)
+                        .clickable(onClick = {
+                            onSocmedIconClick(context.getString(R.string.my_linkedin))
+                        })
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_github),
-                    contentDescription = "github",
+                    contentDescription = stringResource(R.string.github),
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .clickable(onClick = onGithubClick),
+                        .clickable(onClick = {
+                            onSocmedIconClick(context.getString(R.string.my_dicoding))
+                        }),
                     tint = if (isSystemInDarkTheme()) Color.White else Color.Black
                 )
             }
@@ -89,10 +96,10 @@ fun ProfileScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun ProfileScreenPreview() {
+fun AboutScreenPreview() {
     DicodingJetpackComposeSubmissionTheme {
-        ProfileScreen(onDicodingClick = {}, onGithubClick = {}, onLinkedinClick = {})
+        AboutScreen(onSocmedIconClick = {})
     }
 }

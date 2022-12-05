@@ -21,4 +21,7 @@ interface AnimeDao {
     @Query("SELECT EXISTS(SELECT * FROM anime WHERE id = :id)")
     fun isAnimeFavorite(id: Int): Flow<Boolean>
 
+    @Query("DELETE FROM anime")
+    suspend fun deleteAllAnime()
+
 }

@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,6 +44,7 @@ import com.firdausam.dicodingjcomposesub.ui.theme.BlackOpacity
 import com.firdausam.dicodingjcomposesub.ui.theme.DicodingJetpackComposeSubmissionTheme
 import com.firdausam.dicodingjcomposesub.ui.theme.Shapes
 import com.firdausam.dicodingjcomposesub.util.MySnackbar
+import com.firdausam.dicodingjcomposesub.util.TagDetail
 
 @Composable
 fun DetailScreen(
@@ -63,7 +65,7 @@ fun DetailScreen(
     ) { result ->
         val isFavorite = viewModel.isFavorite.collectAsState().value
         with(result) {
-            Column {
+            Column(modifier = Modifier.testTag(TagDetail)) {
                 DetailTopBar(
                     title = title,
                     isFavorite = isFavorite,
@@ -155,7 +157,7 @@ fun DetailTopBar(
 
         Icon(
             imageVector = if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
-            contentDescription = stringResource(R.string.favorite),
+            contentDescription = stringResource(if (isFavorite) R.string.favorite_active else R.string.favorite_inactive),
             tint = MaterialTheme.colors.primary,
             modifier = Modifier
                 .padding(8.dp)

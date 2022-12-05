@@ -3,7 +3,10 @@
     <string name="home">Home</string>
     <string name="detail">Detail</string>
     <string name="favorite">Favorite</string>
-    <string name="profile">Profile</string>
+    <string name="about">About</string>
+    <string name="menu_home">home_page</string>
+    <string name="menu_favorite">favorite_page</string>
+    <string name="menu_about">about_page</string>
     <string name="back">Back</string>
     <string name="members_count">%d members</string>
     <string name="error_message">Sorry for Error</string>
@@ -31,7 +34,13 @@
     <string name="placeholder_search">Find anime</string>
     <string name="save_to_favorite">%s Saved to Favorite</string>
     <string name="to_favorite">To Favorite</string>
+    <string name="favorite_active">favorite active</string>
+    <string name="favorite_inactive">favorite inactive</string>
     <string name="my_name">Firdaus Akhmad Muttaqin</string>
+    <string name="profile">profile</string>
+    <string name="dicoding">dicoding</string>
+    <string name="linkedin">linkedin</string>
+    <string name="github">github</string>
     <string name="my_dicoding">https://www.dicoding.com/users/firdausam</string>
     <string name="my_linkedin">https://www.linkedin.com/in/firdaus-akhmad-muttaqin-b24405119/</string>
     <string name="my_github">https://github.com/firdausam</string>

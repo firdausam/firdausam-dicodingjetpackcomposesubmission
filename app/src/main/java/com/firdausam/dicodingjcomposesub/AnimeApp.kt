@@ -21,10 +21,10 @@ import androidx.navigation.navArgument
 import com.firdausam.dicodingjcomposesub.ui.navigation.KEY_ID
 import com.firdausam.dicodingjcomposesub.ui.navigation.NavigationItem
 import com.firdausam.dicodingjcomposesub.ui.navigation.Screen
+import com.firdausam.dicodingjcomposesub.ui.screen.about.AboutScreen
 import com.firdausam.dicodingjcomposesub.ui.screen.detail.DetailScreen
 import com.firdausam.dicodingjcomposesub.ui.screen.favorite.FavoriteScreen
 import com.firdausam.dicodingjcomposesub.ui.screen.home.HomeScreen
-import com.firdausam.dicodingjcomposesub.ui.screen.profile.ProfileScreen
 import com.firdausam.dicodingjcomposesub.util.currentRoute
 import com.firdausam.dicodingjcomposesub.util.navigateCommon
 import com.firdausam.dicodingjcomposesub.util.rememberMySnackbar
@@ -63,18 +63,8 @@ fun AnimeApp(
                         navController.navigate(Screen.Detail.createRoute(id))
                     })
                 }
-                composable(Screen.Profile.route) {
-                    ProfileScreen(
-                        onDicodingClick = {
-                            context.toIntentUrl(context.getString(R.string.my_dicoding))
-                        },
-                        onLinkedinClick = {
-                            context.toIntentUrl(context.getString(R.string.my_linkedin))
-                        },
-                        onGithubClick = {
-                            context.toIntentUrl(context.getString(R.string.my_github))
-                        }
-                    )
+                composable(Screen.About.route) {
+                    AboutScreen(onSocmedIconClick = { context.toIntentUrl(it) })
                 }
                 composable(
                     route = Screen.Detail.route,
@@ -111,17 +101,20 @@ private fun BottomBar(
             NavigationItem(
                 title = stringResource(id = R.string.home),
                 icon = Icons.Default.Home,
-                screen = Screen.Home
+                screen = Screen.Home,
+                contentDesc = "home_page"
             ),
             NavigationItem(
                 title = stringResource(id = R.string.favorite),
                 icon = Icons.Default.Favorite,
-                screen = Screen.Favorite
+                screen = Screen.Favorite,
+                contentDesc = "favorite_page"
             ),
             NavigationItem(
-                title = stringResource(id = R.string.profile),
+                title = stringResource(id = R.string.about),
                 icon = Icons.Default.AccountCircle,
-                screen = Screen.Profile
+                screen = Screen.About,
+                contentDesc = "about_page"
             ),
         )
 
@@ -131,7 +124,7 @@ private fun BottomBar(
                     icon = {
                         Icon(
                             imageVector = item.icon,
-                            contentDescription = item.title
+                            contentDescription = item.contentDesc
                         )
                     },
                     label = { Text(item.title) },
