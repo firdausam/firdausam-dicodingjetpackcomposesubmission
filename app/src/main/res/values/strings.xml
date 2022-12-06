@@ -11,6 +11,7 @@
     <string name="members_count">%d members</string>
     <string name="error_message">Sorry for Error</string>
     <string name="empty_message">Empty Data</string>
+    <string name="info_title">%s: </string>
     <string name="information">Information</string>
     <string name="ranked">Ranked</string>
     <string name="popularity">Popularity</string>
@@ -45,4 +46,5 @@
     <string name="my_dicoding">https://www.dicoding.com/users/firdausam</string>
     <string name="my_linkedin">https://www.linkedin.com/in/firdaus-akhmad-muttaqin-b24405119/</string>
     <string name="my_github">https://github.com/firdausam</string>
+    <string name="message">message</string>
 </resources>

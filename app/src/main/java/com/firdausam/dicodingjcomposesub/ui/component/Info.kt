@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.firdausam.dicodingjcomposesub.ui.theme.DicodingJetpackComposeSubmissionTheme
+import com.firdausam.dicodingjcomposesub.R
 
 @Composable
 fun Info(
@@ -22,7 +24,7 @@ fun Info(
 ) {
     Row(modifier = modifier) {
         Text(
-            text = "$title: ",
+            text = stringResource(R.string.info_title, title),
             color = Color.Black,
             style = MaterialTheme.typography.caption.copy(
                 fontWeight = FontWeight.SemiBold
@@ -125,5 +127,13 @@ fun DescriptionPreview() {
             title = "title",
             value = "this is value this is value this is value this is value this is value"
         )
+    }
+}
+
+@Preview
+@Composable
+fun TitleDividerPreview() {
+    DicodingJetpackComposeSubmissionTheme {
+        TitleDivider(title = "This is title")
     }
 }

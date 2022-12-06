@@ -12,6 +12,7 @@ import com.firdausam.dicodingjcomposesub.ui.component.ErrorCommon
 import com.firdausam.dicodingjcomposesub.ui.component.ProgressCommon
 import com.firdausam.dicodingjcomposesub.ui.state.BaseState
 import com.firdausam.dicodingjcomposesub.util.TagEmpty
+import com.firdausam.dicodingjcomposesub.util.TagError
 import com.firdausam.dicodingjcomposesub.util.TagLoading
 
 @Composable
@@ -49,5 +50,5 @@ private fun BoxScope.BaseEmpty() {
 
 @Composable
 private fun BoxScope.BaseError(error: String) {
-    ErrorCommon(modifier = Modifier.align(Alignment.Center), error)
+    ErrorCommon(modifier = Modifier.align(Alignment.Center).testTag(TagError), error)
 }

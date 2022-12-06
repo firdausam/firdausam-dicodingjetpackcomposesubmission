@@ -23,7 +23,7 @@ import com.firdausam.dicodingjcomposesub.R
 import com.firdausam.dicodingjcomposesub.ui.theme.DicodingJetpackComposeSubmissionTheme
 
 @Composable
-private fun MessageCommon(
+fun MessageCommon(
     message: String,
     imageVector: ImageVector,
     modifier: Modifier = Modifier,
@@ -38,7 +38,7 @@ private fun MessageCommon(
                 height = 80.dp,
             ),
             imageVector = imageVector,
-            contentDescription = "message",
+            contentDescription = stringResource(id = R.string.message),
             tint = Color.Red
         )
         Text(
